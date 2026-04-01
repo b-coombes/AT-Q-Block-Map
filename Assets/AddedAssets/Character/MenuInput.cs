@@ -1,108 +1,246 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 
 public class MenuInput : MonoBehaviour
 {
     public GameObject DoNotDestroy;
 
-    public TextMeshProUGUI playerText;
+    public TextMeshProUGUI floorNumberText;
+    
+    public TextMeshProUGUI roomNumOneText;
+    
+    public TextMeshProUGUI roomNumTwoText;
+    private int roomSlot;
 
-    private float timer;
+    private TextMeshProUGUI activeText;
+    
+    public TextMeshProUGUI errorText;
+
+    private float blinkTimer;
+    private float inputTimer;
+
 
     private string room;
     private string[] rooms;
 
+    List<string> roomList = new List<string>();
+
+
+    public int activeNum;
+    private bool invis;
+
+    private Gamepad gamepad;
+
+
+
+
     // Start is called before the first frame update
     private void Start()
     {
+        blinkTimer = Time.time + 1f;
+        activeText = floorNumberText;
+        activeNum = Int32.Parse(activeText.text);
 
-        rooms = new string[3] { "2Q24", "2Q28", "3Q22" };
+
+
+
+        string[] rooms = new string[31];
+        for (int i = 0; i < 53; i++)
+        {
+            if (i != 0 && i != 1 && i != 2 && i != 3 && i != 7 && i != 8 && i != 9 && i != 10 && i != 11 && i != 27 && i != 30 && i != 31 && i != 34 && i != 36 && i != 37 && i != 38 && i != 39 && i != 40 && i != 41 && i != 42 && i != 43 && i != 44 && i != 51)
+            {
+
+                //rooms[i] = "2Q" + (i+1).ToString("D2");
+                Debug.Log(i.ToString("D2"));
+                roomList.Add("2Q" + (i + 1).ToString("D2"));
+            }
+        }
+        
+
+
+
     }
-
-
-
     // Update is called once per frame
     void Update()
     {
-        if (Time.time >= timer)
+        gamepad = Gamepad.current;
+        if (gamepad == null)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            return;
+        }
+        else
+        {
+            Vector2 dpadValue = gamepad.dpad.ReadValue();
+
+
+            if (dpadValue.x == -1.00) //left
             {
-                Add("Q");
+                ChangeHorizontal("Left");
+                Debug.Log("L");
             }
-            if (Input.GetKeyDown(KeyCode.Alpha0))
+            if (dpadValue.x == 1.00) //right
             {
-                Add("0");
+                ChangeHorizontal("Right");
+                Debug.Log("R");
             }
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (dpadValue.y == 1.00) //up
             {
-                Add("1");
+                ChangeVertical("Up");
+                Debug.Log("U");
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            if (dpadValue.y == -1.00) //down
             {
-                Add("2");
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                Add("3");
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                Add("4");
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                Add("5");
+                ChangeVertical("Down");
+                Debug.Log("D");
             }
 
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                room = room.Remove(room.Length - 1);
-                playerText.text = room;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (gamepad.buttonSouth.wasPressedThisFrame)
             {
                 Check();
+            }
 
+        }
+
+
+        //blinking affect on active number
+        if (blinkTimer <= Time.time)
+        {
+
+            if (!invis)
+            {
+                activeText.text = "";
+                blinkTimer = Time.time + 0.5f;
+                invis = true;
+            }
+            else
+            {
+                activeText.text = activeNum.ToString();
+                blinkTimer = Time.time + 0.5f;
+                invis = false;
             }
         }
     }
 
-    private void Add(string input)
+    void ChangeVertical(string upOrDown)
     {
-        room += input;
-        timer = Time.time + 0.5f;
-        playerText.text = room;
-        
+        if (Time.time >= inputTimer)
+        {
+            if (upOrDown == "Up")
+            {
+                if (activeNum != 9)
+                {
+                    activeNum += 1;
+                }
+                else
+                {
+                    activeNum = 0;
+                }
+            }
+            if (upOrDown == "Down")
+            {
+                if (activeNum != 0)
+                {
+                    activeNum -= 1;
+                }
+                else
+                {
+                    activeNum = 9;
+                }
+            }
+            activeText.text = activeNum.ToString();
+            inputTimer = Time.time + 1f;
+        }
     }
+
+    void ChangeHorizontal(string leftOrRight)
+    {
+
+        if (Time.time >= inputTimer)
+        {
+            activeText.text = activeNum.ToString();
+            if (leftOrRight == "Left")
+            {
+                if (roomSlot != 1)
+                {
+                    roomSlot -= 1;
+                }
+                else
+                {
+                    roomSlot = 3;
+                }
+            }
+            if (leftOrRight == "Right")
+            {
+                if (roomSlot != 3)
+                {
+                    roomSlot += 1;
+                }
+                else
+                {
+                    roomSlot = 1;
+                }
+            }
+            if (roomSlot == 1)
+            {
+                activeText = floorNumberText;
+            }
+            if (roomSlot == 2)
+            {
+                activeText = roomNumOneText;
+            }
+            if (roomSlot == 3)
+            {
+                activeText = roomNumTwoText;
+            }
+            activeNum = Int32.Parse(activeText.text);
+            inputTimer = Time.time + 1f;
+            Debug.Log("run count");
+        }
+    }
+
+
     private void Check()
     {
-        bool correct = false;
-        for (int i = 0; i < rooms.Length; i++)
+        if (Time.time >= inputTimer)
         {
-            Debug.Log("Check: " +  rooms[i]);
-            if (room == rooms[i])
+            activeText.text = activeNum.ToString();
+            room = floorNumberText.text + "Q" + roomNumOneText.text + roomNumTwoText.text;
+            Debug.Log(room);
+
+            bool correct = false;
+
+
+
+
+            //for (int i = 0; i < rooms.Length; i++)
+
+
+            for (int i = 0; i < roomList.Capacity; i++)
             {
-                GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room = room;
-                Debug.Log("Output:" + GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room);
-                SceneManager.LoadScene(1);
-                correct = true;
+                Debug.Log("Check: " + roomList[i]);
+                if (room == roomList[i])
+                {
+                    GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room = room;
+                    Debug.Log("Output:" + GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room);
+                    SceneManager.LoadScene(1);
+                    correct = true;
+                    Debug.Log("ROOM SUCCSESS");
+                }
             }
+            if (!correct)
+            {
+                errorText.text = "Please input valid room";
+                room = "";
+            }
+
+            inputTimer = Time.time + 1f;
         }
-        if (!correct)
-        {
-            playerText.text = "Please input valid room";
-            room = "";
-        }
-
-
-
-
     }
-
 }
