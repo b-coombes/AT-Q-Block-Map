@@ -20,25 +20,26 @@ public class ArrowScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        var dir = Target.transform.position - transform.position;
-
-        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        
-        if (player.transform.position.x > Target.transform.position.x)
+        if (Target != null)
         {
-            Vector3 tempValue = player.transform.position;
-            tempValue.x = player.transform.position.x - 2;
-            arrow.transform.position = tempValue;
-        }
-        if (player.transform.position.x < Target.transform.position.x)
-        {
-            Vector3 tempValue = player.transform.position;
-            tempValue.x = player.transform.position.x + 2;
-            arrow.transform.position = tempValue;
-        }
+            var dir = Target.transform.position - transform.position;
 
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            if (player.transform.position.x > Target.transform.position.x)
+            {
+                Vector3 tempValue = player.transform.position;
+                tempValue.x = player.transform.position.x - 2;
+                arrow.transform.position = tempValue;
+            }
+            if (player.transform.position.x < Target.transform.position.x)
+            {
+                Vector3 tempValue = player.transform.position;
+                tempValue.x = player.transform.position.x + 2;
+                arrow.transform.position = tempValue;
+            }
+        }
 
 
     }

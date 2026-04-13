@@ -23,6 +23,8 @@ public class MenuInput : MonoBehaviour
     
     public TextMeshProUGUI errorText;
 
+
+
     private float blinkTimer;
     private float inputTimer;
 
@@ -41,6 +43,7 @@ public class MenuInput : MonoBehaviour
 
 
 
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -51,15 +54,15 @@ public class MenuInput : MonoBehaviour
 
 
 
-        string[] rooms = new string[31];
-        for (int i = 0; i < 53; i++)
+        string[] rooms = new string[33];
+        for (int i = 0; i < 54; i++)
         {
-            if (i != 0 && i != 1 && i != 2 && i != 3 && i != 7 && i != 8 && i != 9 && i != 10 && i != 11 && i != 27 && i != 30 && i != 31 && i != 34 && i != 36 && i != 37 && i != 38 && i != 39 && i != 40 && i != 41 && i != 42 && i != 43 && i != 44 && i != 51)
+            if (i != 0 && i != 1 && i != 2 && i != 3 && i != 7 && i != 8 && i != 9 && i != 10 && i != 11 && i != 27 && i != 30 && i != 31 && i != 34 && i != 36 && i != 37 && i != 38 && i != 39 && i != 40 && i != 41 && i != 44 && i != 51)
             {
 
                 //rooms[i] = "2Q" + (i+1).ToString("D2");
                 Debug.Log(i.ToString("D2"));
-                roomList.Add("2Q" + (i + 1).ToString("D2"));
+                roomList.Add("2Q" + i.ToString("D2"));
             }
         }
         
@@ -83,22 +86,22 @@ public class MenuInput : MonoBehaviour
             if (dpadValue.x == -1.00) //left
             {
                 ChangeHorizontal("Left");
-                Debug.Log("L");
+                //Debug.Log("L");
             }
             if (dpadValue.x == 1.00) //right
             {
                 ChangeHorizontal("Right");
-                Debug.Log("R");
+                //Debug.Log("R");
             }
             if (dpadValue.y == 1.00) //up
             {
                 ChangeVertical("Up");
-                Debug.Log("U");
+                //Debug.Log("U");
             }
             if (dpadValue.y == -1.00) //down
             {
                 ChangeVertical("Down");
-                Debug.Log("D");
+                //Debug.Log("D");
             }
 
             if (gamepad.buttonSouth.wasPressedThisFrame)
@@ -116,13 +119,13 @@ public class MenuInput : MonoBehaviour
             if (!invis)
             {
                 activeText.text = "";
-                blinkTimer = Time.time + 0.5f;
+                blinkTimer = Time.time + 0.3f;
                 invis = true;
             }
             else
             {
                 activeText.text = activeNum.ToString();
-                blinkTimer = Time.time + 0.5f;
+                blinkTimer = Time.time + 0.3f;
                 invis = false;
             }
         }
@@ -155,7 +158,7 @@ public class MenuInput : MonoBehaviour
                 }
             }
             activeText.text = activeNum.ToString();
-            inputTimer = Time.time + 1f;
+            inputTimer = Time.time + 0.2f;
         }
     }
 
@@ -200,8 +203,8 @@ public class MenuInput : MonoBehaviour
                 activeText = roomNumTwoText;
             }
             activeNum = Int32.Parse(activeText.text);
-            inputTimer = Time.time + 1f;
-            Debug.Log("run count");
+            inputTimer = Time.time + 0.2f;
+            //Debug.Log("run count");
         }
     }
 
