@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer playerSprite;
     private Gamepad gamepad;
 
+    [Header("References")]
+
     public GameObject completionText;
     public GameObject cancelText;
 
@@ -28,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.linearVelocity = moveInput * moveSpeed;
+        rb.linearVelocity = moveInput * moveSpeed;                      //Handles movement
 
         gamepad = Gamepad.current;
         if (gamepad.buttonEast.wasPressedThisFrame)
@@ -49,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (completionText.activeInHierarchy || cancelText.activeInHierarchy)
             {
-                SceneManager.LoadScene(0);
+                SceneManager.LoadScene(0);          //changes current scene to menu scene
             }
         
         }
@@ -60,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     public void Move(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-        if (moveInput.x < 0)
+        if (moveInput.x < 0)                            //flips player sprite so it matches faced direction
         {
             playerSprite.flipX = true;
         }

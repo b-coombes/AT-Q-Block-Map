@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class ConstantScript : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Held Variables")]
     public string room = "";
 
     void Awake()
     {
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(this.gameObject);                 //keeps this gameobject active across scene changes, good for carrying variables across scenes
     }
 
     // Update is called once per frame

@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 
 public class MenuInput : MonoBehaviour
 {
+
+    [Header("References")]
     public GameObject DoNotDestroy;
 
     public TextMeshProUGUI floorNumberText;
@@ -17,31 +19,29 @@ public class MenuInput : MonoBehaviour
     public TextMeshProUGUI roomNumOneText;
     
     public TextMeshProUGUI roomNumTwoText;
-    private int roomSlot;
 
     private TextMeshProUGUI activeText;
     
     public TextMeshProUGUI errorText;
 
-
+    [Header("Configurations")]
+    public int activeNum;
 
     private float blinkTimer;
     private float inputTimer;
 
-
     private string room;
     private string[] rooms;
 
-    List<string> roomList = new List<string>();
+    private List<string> roomList = new List<string>();
 
-
-    public int activeNum;
+    private int roomSlot;
+    
     private bool invis;
 
     private Gamepad gamepad;
 
-
-
+    
 
 
     // Start is called before the first frame update
@@ -61,7 +61,7 @@ public class MenuInput : MonoBehaviour
             {
 
                 //rooms[i] = "2Q" + (i+1).ToString("D2");
-                Debug.Log(i.ToString("D2"));
+                //Debug.Log(i.ToString("D2"));
                 roomList.Add("2Q" + i.ToString("D2"));
             }
         }
@@ -215,7 +215,7 @@ public class MenuInput : MonoBehaviour
         {
             activeText.text = activeNum.ToString();
             room = floorNumberText.text + "Q" + roomNumOneText.text + roomNumTwoText.text;
-            Debug.Log(room);
+            //Debug.Log(room);
 
             bool correct = false;
 
@@ -227,14 +227,13 @@ public class MenuInput : MonoBehaviour
 
             for (int i = 0; i < roomList.Capacity; i++)
             {
-                Debug.Log("Check: " + roomList[i]);
+                //Debug.Log("Check: " + roomList[i]);
                 if (room == roomList[i])
                 {
                     GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room = room;
                     Debug.Log("Output:" + GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room);
                     SceneManager.LoadScene(1);
                     correct = true;
-                    Debug.Log("ROOM SUCCSESS");
                 }
             }
             if (!correct)

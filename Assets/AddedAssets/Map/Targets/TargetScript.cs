@@ -6,10 +6,16 @@ using UnityEngine;
 
 public class TargetScript : MonoBehaviour
 {
-    public bool active;
+    [Header("References")]
+    
     public Material inactiveMaterial;
     public Material activeMaterial;
     public GameObject completionText;
+
+    [Header("Configurations")]
+    public bool active;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,9 +41,9 @@ public class TargetScript : MonoBehaviour
     {
         if (collision.gameObject.name == "PlayerCharacter")
         {
-            if (active)
+            if (active)                                             //correct room reached check
             {
-                Debug.Log("Active Collider");
+                Debug.Log("Active Collider");                   
                 completionText.SetActive(true);
             }
             else
