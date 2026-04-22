@@ -54,14 +54,11 @@ public class MenuInput : MonoBehaviour
 
 
 
-        string[] rooms = new string[33];
+        string[] rooms = new string[33];            //adds valid options to list to change against
         for (int i = 0; i < 54; i++)
         {
             if (i != 0 && i != 1 && i != 2 && i != 3 && i != 7 && i != 8 && i != 9 && i != 10 && i != 11 && i != 27 && i != 30 && i != 31 && i != 34 && i != 36 && i != 37 && i != 38 && i != 39 && i != 40 && i != 41 && i != 44 && i != 51)
             {
-
-                //rooms[i] = "2Q" + (i+1).ToString("D2");
-                //Debug.Log(i.ToString("D2"));
                 roomList.Add("2Q" + i.ToString("D2"));
             }
         }
@@ -86,25 +83,21 @@ public class MenuInput : MonoBehaviour
             if (dpadValue.x == -1.00) //left
             {
                 ChangeHorizontal("Left");
-                //Debug.Log("L");
             }
             if (dpadValue.x == 1.00) //right
             {
                 ChangeHorizontal("Right");
-                //Debug.Log("R");
             }
             if (dpadValue.y == 1.00) //up
             {
                 ChangeVertical("Up");
-                //Debug.Log("U");
             }
             if (dpadValue.y == -1.00) //down
             {
                 ChangeVertical("Down");
-                //Debug.Log("D");
             }
 
-            if (gamepad.buttonSouth.wasPressedThisFrame)
+            if (gamepad.buttonSouth.wasPressedThisFrame)    //"A" button on xbox controller
             {
                 Check();
             }
@@ -204,42 +197,30 @@ public class MenuInput : MonoBehaviour
             }
             activeNum = Int32.Parse(activeText.text);
             inputTimer = Time.time + 0.2f;
-            //Debug.Log("run count");
         }
     }
 
 
-    private void Check()
+    private void Check()            //checks input room aganst valid options
     {
         if (Time.time >= inputTimer)
         {
             activeText.text = activeNum.ToString();
             room = floorNumberText.text + "Q" + roomNumOneText.text + roomNumTwoText.text;
-            //Debug.Log(room);
 
-            bool correct = false;
-
-
-
-
-            //for (int i = 0; i < rooms.Length; i++)
 
 
             for (int i = 0; i < roomList.Capacity; i++)
             {
-                //Debug.Log("Check: " + roomList[i]);
                 if (room == roomList[i])
                 {
                     GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room = room;
                     Debug.Log("Output:" + GameObject.Find("DoNotDestroyOnLoad").GetComponent<ConstantScript>().room);
                     SceneManager.LoadScene(1);
-                    correct = true;
+
                 }
-            }
-            if (!correct)
-            {
+                
                 errorText.text = "Please input valid room";
-                room = "";
             }
 
             inputTimer = Time.time + 1f;

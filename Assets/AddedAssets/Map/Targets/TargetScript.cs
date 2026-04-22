@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.PackageManager;
+
 using UnityEngine;
 
 public class TargetScript : MonoBehaviour
@@ -20,7 +20,7 @@ public class TargetScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!active)
+        if (!active)            //sets all colliders to black
         {
             this.GetComponent<Renderer>().material = inactiveMaterial;
             this.GetComponent<Renderer>().material.SetColor("_Color", Color.black);
@@ -30,7 +30,7 @@ public class TargetScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (active)
+        if (active)             //changes active collider to gold
         {
             this.GetComponent<Renderer>().material = activeMaterial;
             this.GetComponent<Renderer>().material.SetColor("_Color", Color.gold);
